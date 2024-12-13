@@ -9,7 +9,7 @@ This app, unlike other apps, has the capability to set up separate lists for sep
 <img src="https://github.com/user-attachments/assets/ad67b4e9-b5c0-42ba-9f1d-85d448a5173e" alt="Description" width="300">
 <img src="https://github.com/user-attachments/assets/88194856-5096-4a55-8fb6-b340da6a87e9" alt="Description" width="300">
 
----![IMG_9524 2]()
+---
 
 ## Steps to Create the App
 
