@@ -5,6 +5,10 @@ This is a free Google app that you can build to manage your shopping lists. Usua
 
 This app, unlike other apps, has the capability to set up separate lists for separate stores you are going to. Also, it keeps track of popular items and suggests them the next time you are creating your list to choose from your past items. When you check an item, it will disappear from your list. The only thing you need is to have a Google account, and I show you here how to do the same for yourself.
 
+<img src="https://github.com/user-attachments/assets/ad729bdb-b239-40a6-bd38-0375d50fcaee" alt="Description" width="300">
+<img src="https://github.com/user-attachments/assets/88194856-5096-4a55-8fb6-b340da6a87e9" alt="Description" width="300">
+<img src="https://github.com/user-attachments/assets/ad67b4e9-b5c0-42ba-9f1d-85d448a5173e" alt="Description" width="300">
+
 ---
 
 ## Steps to Create the App
@@ -72,5 +76,4 @@ To make the app even cooler and easier to access, you can add it directly to you
 4. Choose a name for the app (e.g., "Shopping List") and confirm.
 5. The app will now appear on your home screen, just like a regular app!
 Now you can open it directly from your home screen without searching for the link every time.
-
 
