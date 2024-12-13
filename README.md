@@ -5,11 +5,11 @@ Unlike other apps, this one allows you to set up separate lists for each store y
 
 The only requirement is a Google account. In this guide, I’ll show you how to build this app for yourself and take control of your shopping experience!
 
-Step 1: Set Up Your Google Sheet
-Log in to your Google account and open Google Sheets.
-Create a new Google Sheet and name it "Shopping List":
-Click on the title at the top-left corner and type "Shopping List."
-At the bottom of the sheet, where tabs are located, rename the default tab ("Sheet 1") to "Shopping List":
-Right-click on the "Sheet 1" tab.
-Select "Rename" and type "Shopping List".
+## Step 1: Set Up Your Google Sheet
+1. Log in to your Google account and open Google Sheets.
+2. Create a new Google Sheet and name it "Shopping List":
+   - Click on the title at the top-left corner and type "Shopping List."
+3. At the bottom of the sheet, where tabs are located, rename the default tab ("Sheet 1") to "Shopping List":
+   - Right-click on the "Sheet 1" tab.
+   - Select "Rename" and type "Shopping List".
 💡 Note: Make sure to copy and paste exactly as written here to avoid any errors later.
