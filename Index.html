@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shopping List Manager</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #007BFF;
+            --secondary-color: #FFFFFF;
+            --background-color: #F4F7F6;
+            --text-color-dark: #2C3E50;
+            --text-color-light: #7F8C8D;
+            --border-color: #E0E0E0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color-dark);
+            line-height: 1.8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-y: scroll; /* Enable vertical scrolling for the page */
+
+        }
+
+        .container {
+            background: var(--secondary-color);
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            max-width: 100%;
+            width: 90%;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        label {
+            font-weight: 600;
+            color: var(--text-color-dark);
+            font-size: 1.5rem;
+        }
+
+        select, input[type="text"] {
+            width: 100%;
+            padding: 20px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1.8rem;
+            color: var(--text-color-dark);
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 6px rgba(76, 175, 80, 0.3);
+        }
+
+        button {
+            background: var(--primary-color);
+            color: var(--secondary-color);
+            border: none;
+            padding: 15px;
+            font-size: 2rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background 0.3s;
+            width: 100%;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--text-color-dark);
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul li {
+            display: flex;
+            align-items: center;
+            background: var(--background-color);
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            font-size: 1.8rem;
+        }
+
+        ul li:hover {
+            background: #E8F5E9;
+        }
+
+        ul li input[type="checkbox"] {
+            margin-right: 20px;
+            width: 30px;
+            height: 30px;
+            accent-color: var(--primary-color);
+        }
+
+        ul li span {
+            flex-grow: 1;
+            font-size: 1.8rem;
+            color: var(--text-color-dark);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 1.2rem;
+            color: var(--text-color-light);
+        }
+#popular-items-list {
+    margin-top: 10px; /* Add space between the title and the list */
+    border: 1px solid #e0e0e0; /* Optional: Add a border for clarity */
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 10px; /* Add padding for better readability */
+    visibility: hidden; /* Use visibility to hide/show instead of display: none */
+    height: auto; /* Ensure it can expand to fit all items */
+}
+
+
+
+#items-list {
+    margin-bottom: 40px; /* Increase space between Items List and Popular Items */
+}
+
+/* Optional: Adjust margin for the Popular Items title */
+h2 {
+    margin-top: 10px; /* Fine-tune spacing above Popular Items title */
+}
+
+ #toggle-popular-items {
+    margin-right: 10px; /* Add space between the checkbox and title */
+    transform: scale(2); /* Make the checkbox larger */
+    cursor: pointer;
+    vertical-align: middle; /* Align with the text */
+}
+
+/* Smaller and compact buttons for popular items */
+.popular-button {
+    padding: 6px 10px; /* Smaller padding for compact size */
+    font-size: 1.8rem; /* Smaller font size */
+    border-radius: 5px;
+    width: 120px; /* Automatically adjust button width to fit text */
+    margin-left: 35px; /* Add space between buttons */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center;
+}
+
+.popular-button.add {
+    background-color: #28a745; /* Green for Add */
+    color: white;
+    border: none;
+}
+
+.popular-button.add:hover {
+    background-color: #218838; /* Darker green on hover */
+}
+
+.popular-button.delete {
+    background-color: #dc3545; /* Red for Delete */
+    color: white;
+    border: none;
+}
+
+.popular-button.delete:hover {
+    background-color: #c82333; /* Darker red on hover */
+}
+
+    </style>
+    <script>
+        const shoppingPlaces = ["Trader Joe's", "QFC", "Costco", "Rose", "Farmers Market", "Fred Meyer", "Others"];
+
+        function loadShoppingPlaces() {
+            const dropdown = document.getElementById('place');
+            dropdown.innerHTML = '';
+            shoppingPlaces.forEach(place => {
+                const option = document.createElement('option');
+                option.value = place;
+                option.textContent = place;
+                dropdown.appendChild(option);
+            });
+
+            if (shoppingPlaces.length > 0) {
+                dropdown.value = shoppingPlaces[0];
+                fetchItems();
+                fetchPopularItems(); // Fetch popular items for the first place
+            }
+        }
+
+        function fetchItems() {
+            const place = document.getElementById('place').value;
+            if (!place) return;
+            google.script.run.withSuccessHandler(renderItems).getItems(place);
+        }
+
+        function renderItems(items) {
+            const list = document.getElementById("items-list");
+            list.innerHTML = "";
+            if (!items || items.length === 0) {
+                list.innerHTML = "<li>No items found.</li>";
+                return;
+            }
+            items.forEach(item => {
+                const li = document.createElement("li");
+                li.innerHTML = `
+                    <input type="checkbox" onclick="deleteItem('${item}')">
+                    <span>${item}</span>
+                `;
+                list.appendChild(li);
+            });
+        }
+
+        function fetchPopularItems() {
+            const place = document.getElementById('place').value;
+            if (!place) return;
+            google.script.run.withSuccessHandler(renderPopularItems).getPopularItems(place);
+        }
+
+        function renderPopularItems(items) {
+    const list = document.getElementById("popular-items-list");
+    list.innerHTML = "";
+    if (!items || items.length === 0) {
+        list.innerHTML = "<li>No popular items found.</li>";
+        return;
+    }
+
+    items.forEach(item => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+            <span>${item.item} (${item.frequency} times)</span>
+            <button class="popular-button add" onclick="addItemDirectly('${item.item}')">Add</button>
+            <button class="popular-button delete" onclick="deletePopularItem('${item.item}')">Delete</button>
+        `;
+        list.appendChild(li);
+    });
+}
+
+
+
+function deletePopularItem(item) {
+    const place = document.getElementById('place').value;
+    if (!place) {
+        alert("Please select a store first.");
+        return;
+    }
+
+    google.script.run.withSuccessHandler(response => {
+        if (response.status === "success") {
+            fetchPopularItems(); // Refresh the popular items list
+        } else {
+            console.error("Error deleting popular item:", response);
+        }
+    }).deletePopularItem(place, item);
+}
+
+
+
+
+
+  function addItemDirectly(item) {
+    const place = document.getElementById('place').value;
+    const inputBox = document.getElementById('new-item'); // Reference to the input box
+    item = item.trim(); // Remove any leading or trailing whitespace
+    
+    if (!place || !item) {
+        inputBox.value = ""; // Clear the input box if no valid input
+        return; // Exit silently
+    }
+
+    google.script.run.withSuccessHandler(response => {
+        if (response.status === "success" || response.status === "reactivated" || response.status === "incremented") {
+            fetchItems(); // Refresh shopping list
+            fetchPopularItems(); // Refresh popular items
+        } else if (response.status === "exists") {
+            // Item already exists, do nothing
+        } else {
+            console.error("Error adding item:", response);
+        }
+        inputBox.value = ""; // Clear the input box after the operation
+    }).addItem(place, item);
+}
+
+        
+        function deleteItem(item) {
+          const place = document.getElementById('place').value;
+          google.script.run.withSuccessHandler(response => {
+          if (response.status === "success") {
+            fetchItems(); // Refresh the shopping list
+            fetchPopularItems(); // Refresh popular items
+          } else {
+            console.error("Error deleting item:", response);
+          }
+          }).deleteItem(place, item);
+        }
+function togglePopularItems() {
+    const checkbox = document.getElementById('toggle-popular-items');
+    const list = document.getElementById('popular-items-list');
+
+    if (checkbox.checked) {
+        list.style.visibility = 'visible'; // Show popular items
+        list.style.height = 'auto'; // Allow full height for the list
+    } else {
+        list.style.visibility = 'hidden'; // Hide popular items
+        list.style.height = '0'; // Collapse height when hidden
+    }
+}
+
+        window.onload = loadShoppingPlaces;
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Shopping List Manager</h1>
+        <div>
+            <label for="place">Select Shopping Place:</label>
+            <select id="place" onchange="fetchItems(); fetchPopularItems();"></select>
+        </div>
+        <div>
+            <label for="new-item">Add New Item:</label>
+            <input type="text" id="new-item" placeholder="Enter item">
+            <button onclick="addItemDirectly(document.getElementById('new-item').value)">Add</button>
+        </div>
+        <h2>Items List</h2>
+        <ul id="items-list"></ul>
+        <h2>
+    <input type="checkbox" id="toggle-popular-items" onchange="togglePopularItems()">
+    Popular Items
+</h2>
+<ul id="popular-items-list"></ul>
+
+        <footer>
+            <p>Shopping List Manager &copy; 2024</p>
+        </footer>
+    </div>
+</body>
+</html>
